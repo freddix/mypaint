@@ -6,6 +6,7 @@ License:	GPL v2
 Group:		Applications
 Source0:	http://download.gna.org/mypaint/%{name}-%{version}.tar.bz2
 # Source0-md5:	dcd43933746a4579e7994f506e097823
+Patch0:		%{name}-usrmove.patch
 URL:		http://mypaint.intilinux.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -27,8 +28,15 @@ Fast and easy painting application.
 
 %prep
 %setup -q
+%patch0 -p1
 
-sed -i -e "s|python\ =.*|python='%{__python}'|g" SConstruct
+# runtime paths fixes
+%{__sed} -i "s|python\ =.*|python='%{__python}'|g" SConstruct
+%{__sed} -i "s|lib/mypaint|%{_lib}/mypaint|g" SConstruct mypaint.py
+
+# depracated options
+%{__sed} -i 's|PathOption|PathVariable|g' SConstruct
+%{__sed} -i 's|Options|Variables|g' SConstruct
 
 %build
 %{__scons} \
