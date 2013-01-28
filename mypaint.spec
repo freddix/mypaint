@@ -1,11 +1,11 @@
 Summary:	Fast and easy painting application
 Name:		mypaint
-Version:	1.0.0
+Version:	1.1.0
 Release:	1
 License:	GPL v2
 Group:		Applications
 Source0:	http://download.gna.org/mypaint/%{name}-%{version}.tar.bz2
-# Source0-md5:	dcd43933746a4579e7994f506e097823
+# Source0-md5:	7846a8406259d0fc81c9a2157a2348bf
 Patch0:		%{name}-usrmove.patch
 URL:		http://mypaint.intilinux.com/
 BuildRequires:	autoconf
@@ -31,12 +31,10 @@ Fast and easy painting application.
 %patch0 -p1
 
 # runtime paths fixes
-%{__sed} -i "s|python\ =.*|python='%{__python}'|g" SConstruct
-%{__sed} -i "s|lib/mypaint|%{_lib}/mypaint|g" SConstruct mypaint.py
+%{__sed} -i "s|lib/mypaint|%{_lib}/mypaint|g" SConscript mypaint.py
 
-# depracated options
-%{__sed} -i 's|PathOption|PathVariable|g' SConstruct
-%{__sed} -i 's|Options|Variables|g' SConstruct
+# optflags
+%{__sed} -i "s|-O3|%{rpmcflags}|g" SConstruct
 
 %build
 %{__scons} \
@@ -60,6 +58,8 @@ find $RPM_BUILD_ROOT%{_datadir}/%{name} -name \*.py -exec rm -f {} \;
 mv $RPM_BUILD_ROOT%{_datadir}/locale/{nn_NO,nn}
 
 %find_lang %{name}
+%find_lang libmypaint
+cat libmypaint.lang >> %{name}.lang
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -86,6 +86,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/brushlib
 %{_datadir}/%{name}/gui
 %{_datadir}/%{name}/lib
+%{_datadir}/%{name}/palettes
 %{_datadir}/%{name}/pixmaps
 
 %{_desktopdir}/*.desktop
