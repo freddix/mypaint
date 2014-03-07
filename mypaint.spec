@@ -1,7 +1,7 @@
 Summary:	Fast and easy painting application
 Name:		mypaint
 Version:	1.1.0
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications
 Source0:	http://download.gna.org/mypaint/%{name}-%{version}.tar.bz2
