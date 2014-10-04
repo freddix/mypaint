@@ -1,7 +1,7 @@
 Summary:	Fast and easy painting application
 Name:		mypaint
 Version:	1.1.0
-Release:	2
+Release:	3
 License:	GPL v2
 Group:		Applications
 Source0:	http://download.gna.org/mypaint/%{name}-%{version}.tar.bz2
@@ -14,11 +14,12 @@ BuildRequires:	libtool
 BuildRequires:	python-pygtk-devel
 BuildRequires:	rpm-pythonprov
 BuildRequires:	scons
+BuildRequires:	swig-python
 Requires(post,postun):	/usr/bin/gtk-update-icon-cache
 Requires(post,postun):	desktop-file-utils
 Requires(post,postun):	hicolor-icon-theme
 Requires:	pydoc
-Requires:	python-numpy-numarray
+Requires:	python-numpy
 Requires:	python-protobuf
 Requires:	python-pygtk
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -32,9 +33,10 @@ Fast and easy painting application.
 
 # runtime paths fixes
 %{__sed} -i "s|lib/mypaint|%{_lib}/mypaint|g" SConscript mypaint.py
-
 # optflags
 %{__sed} -i "s|-O3|%{rpmcflags}|g" SConstruct
+# json-c
+%{__sed} -i "s|'json|'json-c|" brushlib/SConscript
 
 %build
 %{__scons} \
